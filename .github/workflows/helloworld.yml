@@ -1,4 +1,4 @@
-name: prod_firebase_backup
+name: docker-actions
 
 on:
   push:
