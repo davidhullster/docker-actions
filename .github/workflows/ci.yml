@@ -8,7 +8,6 @@ jobs:
     name: Changes
     runs-on: ubuntu-latest
     outputs:
-      stage_backup_job: ${{ steps.filter.outputs.stage_backup_job }}
       prod_firebase_backup: ${{ steps.filter.outputs.prod_firebase_backup }}
     steps:
     - uses: actions/checkout@v3
@@ -23,7 +22,7 @@ jobs:
     name: Deploy
     needs: changes
     if: ${{ needs.changes.outputs.prod_firebase_backup == 'true' }}
-    uses: ./.github/workflows/prod-firebase-backup.yaml
+    uses: ./.github/workflows/helloworld.yaml
     with:
       environment: ${{ (endsWith(github.ref, '/master') && 'prod') || 'stage' }}
     secrets:
