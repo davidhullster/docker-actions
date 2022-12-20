@@ -29,10 +29,18 @@ jobs:
         with:
           images: davidhullster/helloworld
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          docker build --file prod/kubernetes/prod/firestore-backup/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:latest --no-cache
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      # - name: Build and push
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
