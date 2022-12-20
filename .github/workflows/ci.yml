@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+jobs:
+  changes:
+    name: Changes
+    runs-on: ubuntu-latest
+    outputs:
+      stage_backup_job: ${{ steps.filter.outputs.stage_backup_job }}
+      prod_firebase_backup: ${{ steps.filter.outputs.prod_firebase_backup }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        base: ${{ github.ref }}
+        filters: |
+          prod_firebase_backup:
+            - 'prod/kubernetes/prod/firestore-backup/**'
+  prod_firebase_backup:
+    name: Deploy
+    needs: changes
+    if: ${{ needs.changes.outputs.prod_firebase_backup == 'true' }}
+    uses: ./.github/workflows/prod-firebase-backup.yaml
+    with:
+      environment: ${{ (endsWith(github.ref, '/master') && 'prod') || 'stage' }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

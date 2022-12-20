@@ -1,4 +1,4 @@
-name: Publish DockerHub image
+name: prod_firebase_backup
 
 on:
   push:
