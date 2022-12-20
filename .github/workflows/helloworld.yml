@@ -34,7 +34,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
-          docker build --file prod/kubernetes/prod/firestore-backup/Dockerfile -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest --no-cache
+          docker build . --file prod/kubernetes/prod/firestore-backup/Dockerfile -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest --no-cache
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       # - name: Build and push
