@@ -35,7 +35,7 @@ jobs:
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
           docker build . --file prod/kubernetes/prod/firestore-backup/Dockerfile -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest --no-cache
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
 
       # - name: Build and push
       #   uses: docker/build-push-action@v2
